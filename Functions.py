@@ -2,7 +2,7 @@ import numpy as np
 
 # The integral of test function f(x,y,z)= 3x^2+y+z with respect to x is : g(x,y,z)= x^3+xy+xz , so 
 # the analytical integration over a triangular element as a functions of its vertex coordinates may be obtained as: 
-def funcion_analitica(a1, a2, a3, b1, b2, b3, c1, c2, c3):
+def Analytic_value(a1, a2, a3, b1, b2, b3, c1, c2, c3):
     p1=(b1*c2 - b1*c3 - b2*c1 + b2*c3 + b3*c1 - b3*c2)*(6*a1**3 + 6*a1**2*a2 + 6*a1**2*a3 + 6*a1*a2**2 + 6*a1*a2*a3 + 6*a1*a3**2 + 10*a1*b1 + 5*a1*b2 + 5*a1*b3 + 10*a1*c1 + 5*a1*c2 + 5*a1*c3 + 6*a2**3 + 6*a2**2*a3 + 6*a2*a3**2 + 5*a2*b1 + 10*a2*b2 + 5*a2*b3 + 5*a2*c1 + 10*a2*c2 + 5*a2*c3 + 6*a3**3 + 5*a3*b1 + 5*a3*b2 + 10*a3*b3 + 5*a3*c1 + 5*a3*c2 + 10*a3*c3)/120;
     return p1
 
