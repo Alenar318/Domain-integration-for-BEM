@@ -1,5 +1,5 @@
 # Domain-integration-for-BEM
-RBIM3D is a subroutine used to generates a meshless quadrature for the integration of tridimensional functions over simple or multi-connected irregular domains.
+This repository reproduces code for the radial basis integration method (RBIM). It contains some subroutines used to generates a meshless quadrature for the integration of tridimensional functions over simple or multi-connected irregular domains.
 
 ## Code Structure
 
@@ -13,6 +13,10 @@ RBIM3D is a subroutine used to generates a meshless quadrature for the integrati
 - Build the **augmented radial basis function matrix** and the **integrals vector** to compute the quadrature weights. 
 - Compute the integral of the test fuction using the RBIM quadrature in order to check the percentage of error between the two approaches. 
 - Save the quadrature weights and point coordinates in a text file so they can be used in another script as needed.  
+
+# Examples
+
+Files for computing the integral of the test function 'f(x,y,z)= 3x^2+y+z' over a tridimensional capsule were included 
 
 # Cite this work
 
