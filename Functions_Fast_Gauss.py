@@ -9,11 +9,8 @@ def Analytic_value(a1, a2, a3, b1, b2, b3, c1, c2, c3):
 
 # The integral of the Polyharmonic RBF with respect to x over a triangular element as a
 #  function of its vertex coordinates  may be obtained as:
-def integral_rbfx(a1, a2, a3, b1, b2, b3, c1, c2, c3, xi, yi, zi, u, v):
-    # Mapping based on triangular baricentric coordinates
-    x = a1 * (1 - u - v) + a2 * u + a3 * v
-    y = b1 * (1 - u - v) + b2 * u + b3 * v
-    z = c1 * (1 - u - v) + c2 * u + c3 * v
+def integral_rbfx(xi, yi, zi, x, y, z):
+    
     p = x - xi
     q = np.sqrt((y - yi) ** 2 + (z - zi) ** 2)
 
@@ -21,31 +18,52 @@ def integral_rbfx(a1, a2, a3, b1, b2, b3, c1, c2, c3, xi, yi, zi, u, v):
           240 * np.arctan(p/q) * q ** 5 - 240 * p * q ** 4 - 70 * p ** 3 * q ** 2 - 18 * p ** 5) / 450
     return s1
 
+
+def Coord_Gauss(a1, a2, a3, b1, b2, b3, c1, c2, c3, u, v, w,Jel):
+    # Mapping based on triangular baricentric coordinates
+    x = a1 * (1 - u - v) + a2 * u + a3 * v
+    y = b1 * (1 - u - v) + b2 * u + b3 * v
+    z = c1 * (1 - u - v) + c2 * u + c3 * v
+
+    W=w*Jel;
+  
+    s1 = [W,x,y,z]
+           
+    return s1
+
+def Global_Quad_Gauss(triangles,vertices,min_index,xw,NP):
+    IQ=np.zeros(4);
+    for tri in triangles:
+            v1 = vertices[tri[0] - min_index]
+            v2 = vertices[tri[1] - min_index]
+            v3 = vertices[tri[2] - min_index]
+            # Extracting vertex coordinates
+            a1, b1, c1 = v1
+            a2, b2, c2 = v2
+            a3, b3, c3 = v3
+
+            Jac_el = (-b1 + b2) * (-c1 + c3) - (-b1 + b3) * (-c1 + c2)
+
+            for J3 in range(NP):
+                psi = xw[J3, 0]
+                eta = xw[J3, 1]
+                w = xw[J3, 2]
+                data= Coord_Gauss(a1, a2, a3, b1, b2, b3, c1, c2, c3, psi, eta, w,Jac_el )
+                IQ = np.vstack((IQ, data))
+    return IQ
+
 # Numeric integration of the RBF centered at point "i"
-def calculate_I_rbf_for_node(i, Qpoint, triangles, vertices, min_index, xw, NP):
+def calculate_I_rbf_for_node(i, Qpoint, triangles, vertices, min_index, xw, NP,IQ):
     xi = Qpoint[i, 0]
     yi = Qpoint[i, 1]
     zi = Qpoint[i, 2]
 
-    I1 = 0
-    for tri in triangles:
-        v1 = vertices[tri[0] - min_index]
-        v2 = vertices[tri[1] - min_index]
-        v3 = vertices[tri[2] - min_index]
-        # Extracting vertex coordinates
-        a1, b1, c1 = v1
-        a2, b2, c2 = v2
-        a3, b3, c3 = v3
-
-        Jac_el = (-b1 + b2) * (-c1 + c3) - (-b1 + b3) * (-c1 + c2)
-
-        for J3 in range(NP):
-            psi = xw[J3, 0]
-            eta = xw[J3, 1]
-            W = xw[J3, 2]
-
-            val = integral_rbfx(a1, a2, a3, b1, b2, b3, c1, c2, c3, xi, yi, zi, psi, eta)
-            I1 += val * W * (0.5 * Jac_el)
+    x=IQ[:,1]
+    y=IQ[:,2]
+    z=IQ[:,3]
+    WInt=0.5*IQ[:,0]
+    F_test= integral_rbfx(xi, yi, zi,x,y,z)
+    I1=np.dot(WInt.T, F_test)
 
     return i, I1
 

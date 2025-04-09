@@ -16,8 +16,8 @@ This repository reproduces code for the radial basis integration method (RBIM). 
 
 ## Examples
 
-Files for computing the integral of the test function 'f(x,y,z)= 3x^2+y+z' over a tridimensional capsule were included 
+Files for computing the integral of the test function 'f(x,y,z)= 3x^2+y+z' over two tridimensional domains were included 
 
 ## Cite this work
 
-If you use this code, please consider citing the following work:
+If you use this code, please consider citing this work
